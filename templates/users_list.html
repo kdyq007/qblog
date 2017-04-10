@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+{% set active_page = 'users_list' %}
+
+{% block style %}
+    <style>
+        #user_btn .list-group-item {
+            border: none;
+        }
+
+        .user_manage li{
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <input class="hidden" id="uid"/>
+    <input class="hidden" id="nickname"/>
+    <h3 style="text-align: center;">三方市场使用人管理</h3>
+    <div class="col-xs-2">
+        <ul class="list-group user_manage">
+            {% for m_user in m_users %}
+                <li class="list-group-item" uid="{{ m_user.uid }}"
+                    onclick="user_manage(this)"><a>{{ m_user.nickname }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-8" style="margin-top: 20px;">
+
+        <div class="col-xs-12" id="user_manage"></div>
+    </div>
+    <div class="col-md-2">
+        <ul class="list-group" id="user_btn">
+            <li class="list-group-item">
+                <button type="button"
+                        class="btn btn-wide btn-primary"
+                        onclick="set_add_user()"><span
+                        class="fui-plus"></span> 新增用户
+                </button>
+            </li>
+            <li class="list-group-item">
+                <button type="button"
+                        class="btn btn-wide btn-warning"
+                        onclick="set_modify_user()" id="modify_btn"
+                        style="display: none;"><span
+                        class="fui-new"></span> 修改用户
+                </button>
+            </li>
+            <li class="list-group-item">
+                <button type="button"
+                        class="btn btn-wide btn-danger" onclick="delete_user()"
+                        id="delete_btn" style="display: none;"><span
+                        class="fui-cross"></span> 删除用户
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bs-example-modal-sm" id="Add_User_Modal"
+         tabindex="-1" role="dialog" aria-labelledby="myUserLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myUserLabel">新增使用人</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="add_market"
+                          action="/">
+                        <div class="form-group">
+                            <label for="nickname"
+                                   class="col-sm-3 control-label">姓名:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       name="nickname" list="users"
+                                       onautocomplete="auto_complate()"
+                                       onblur="auto_complate()">
+                                <datalist id="users">
+                                    {% for users_data in users_datas %}
+                                        <option value="{{ users_data }}">
+                                    {% endfor %}
+                                </datalist>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="employee_id"
+                                   class="col-sm-3 control-label">工号:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       name="employee_id">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="department"
+                                   class="col-sm-3 control-label">部门:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       name="department">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile"
+                                   class="col-sm-3 control-label">联系方式:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       name="mobile">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ip"
+                                   class="col-sm-3 control-label">IP:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       name="ip">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">取消
+                    </button>
+                    <button type="button" id="myUserBtn"
+                            class="btn btn-primary">确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function () {
+            $(".user_manage > li:first").click();
+        });
+
+        function user_manage(obj) {
+
+            var uid = $(obj).attr("uid");
+            $("#uid").val(uid);
+            var nickname = $(obj).find("a").text();
+            $("#nickname").val(nickname);
+            $("#modify_btn").show();
+            $("#delete_btn").show();
+            $.ajax({
+                url: $SCRIPT_ROOT + "/user_manage/" + uid,
+                type: "GET",
+                success: function (res) {
+                    $(obj).css("background-color", "#ddd").siblings().css("background-color", "#fff");
+                    $("#user_manage").html(res);
+                }
+            });
+        }
+
+        function add_user() {
+            $.ajax({
+                type: "PUT",
+                url: $SCRIPT_ROOT + "/add_user",
+                data: $('#add_market').serialize(),
+                async: false,
+                error: function (request) {
+                    alert("连接失败！");
+                },
+                success: function (res) {
+                    if (res.status == 200) {
+                        location.reload();
+                    } else {
+                        display_message(res)
+                    }
+                }
+            });
+        }
+
+        function set_add_user() {
+            $("#myUserLabel").text("新增用户");
+            $("input[name='nickname']").val("");
+            $("input[name='employee_id']").val("");
+            $("input[name='department']").val("");
+            $("input[name='mobile']").val("");
+            $("input[name='ip']").val("");
+            $("#myUserBtn").unbind("click");
+            $("#myUserBtn").bind("click", add_user);
+            $('#Add_User_Modal').modal('show');
+        }
+
+        function set_modify_user() {
+            $("#myUserLabel").text("修改用户");
+            $("#myUserBtn").unbind("click");
+            $("#myUserBtn").bind("click", modify_user);
+            $("input[name='nickname']").val($("#nickname").val());
+            auto_complate();
+            $('#Add_User_Modal').modal('show');
+        }
+
+        function modify_user() {
+            $.ajax({
+                type: "POST",
+                url: $SCRIPT_ROOT + "/modify_user",
+                data: $('#add_market').serialize(),
+                async: false,
+                error: function (request) {
+                    alert("连接失败！");
+                },
+                success: function (res) {
+                    if (res.status == 200) {
+                        location.reload();
+                    } else {
+                        display_message(res);
+                    }
+                }
+            });
+        }
+
+        function delete_user() {
+            if (confirm("确定要删除用户 " + $("#nickname").val() + " 吗？")) {
+                $.ajax({
+                    type: "DELETE",
+                    url: $SCRIPT_ROOT + "/delete_user",
+                    data: {"uid": $("#uid").val()},
+                    async: false,
+                    error: function (request) {
+                        alert("连接失败！");
+                    },
+                    success: function (res) {
+                        if (res.status == 200) {
+                            location.reload();
+                        } else {
+                            display_message(res);
+                        }
+                    }
+                });
+            }
+        }
+
+        function auto_complate() {
+            $.ajax({
+                type: "GET",
+                url: $SCRIPT_ROOT + "/get_user_data",
+                data: {"name": $("input[name='nickname']").val()},
+                async: false,
+                success: function (res) {
+                    if (res.status == 200) {
+                        var data = res.data;
+                        $("input[name='department']").val(data.department);
+                        $("input[name='mobile']").val(data.mobile);
+                        $("input[name='employee_id']").val(data.employee_id);
+                        $("input[name='ip']").val(data.ip);
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}
+主页
+{% endblock %}
+
+{% block style %}
+<link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+
+{% block body %}
+
+        <div class="col-md-8 main-content">
+            <article class="post tag-abuot-qblog tag-qblog-in-depth">
+                <div class="post-head">
+                    <h1 class="post-title">
+                        <a href="#">标题要长长长长长长长长长</a>
+                    </h1>
+                    <div class="post-meta">
+                        <span class="author">
+                            作者
+                            <a href="$">齐奇</a>
+                        </span>
+                        &nbsp;&nbsp;•
+                        <time class="data" datetime="2017-03-15">2017年03月15日</time>
+                    </div>
+                </div>
+
+                <div class="post-media">
+                    <a href="#"><img src="http://static.ghostchina.com/image/4/45/e447fa21190690b28f1957d5937f4.png" alt="标题"></a>
+                </div>
+
+                    <div class="post-content">
+                        <p>
+                            紧随 Ghost 官方脚步，Ghost 0.7.4 中文正式版发布了！这一版本包含了自 Ghost 0.7.3 版本发布以来所修正的 bug，主要是针对开放 API 功能的改进。 0.7.1、0.7.2、0.7.3 这些版本哪去了？ 从 Ghost 0.7.0 版本发布以来，Gh
+                        </p>
+                    </div>
+                    <div class="post-permalink">
+                        <a href="#" class="btn btn-default">阅读全文</a>
+                    </div>
+                    <div class="post-footer clearfix">
+                        <div class="pull-left tag-list">
+                            <i class="fa fa-folder-open-o"></i>
+                            <a href="#">qblog</a>,
+                            <a href="#">qiqi</a>,
+                            <a href="#">flask</a>
+                        </div>
+                    </div>
+
+            </article>
+        </div>
+
+{% endblock %}
+
+{% block tail %}
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

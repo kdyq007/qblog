@@ -1,0 +1,45 @@
+<div class="row-fluid">
+    <div class="pull-left pagination">
+        <div class="dataTables_info"
+             id="sample-table-2_info">{{ (pagination.page - 1) * pagination.per_page }}
+            -
+            {% if not pagination.has_next %}{{ pagination.total }} {% else %}
+                {{ pagination.page * pagination.per_page }}
+            {% endif %}
+            , 共{{ pagination.total }}条记录
+        </div>
+    </div>
+    <ul class="pagination pagination-sm pull-right">
+        {% if pagination.page == 1 %}
+            <li class="prev disabled"><a href="#">上一页</a></li>
+        {% else %}
+            {% set lpage = pagination.page - 1 %}
+            <li class="prev" style="cursor: pointer"><a
+                    onclick="page_select('{{ lpage }}')">上一页</a></li>
+        {% endif %}
+
+        {%- for page in pagination.iter_pages() %}
+            {% if page %}
+                {% if page != pagination.page %}
+                    <li style="cursor: pointer"><a
+                            onclick="page_select('{{ page }}')">{{ page }}</a>
+                    </li>
+                {% else %}
+                    <li class="active"><a
+                            onclick="page_select('{{ page }}')">{{ page }}</a>
+                    </li>
+                {% endif %}
+            {% else %}
+                <li class="disabled"><a class=ellipsis>…</a></li>
+            {% endif %}
+        {%- endfor %}
+
+        {% if not pagination.has_next %}
+            <li class="next disabled"><a href="#">下一页</a></li>
+        {% else %}
+            {% set rpage = pagination.page + 1 %}
+            <li style="cursor: pointer"><a
+                    onclick="page_select('{{ rpage }}')">下一页</a></li>
+        {% endif %}
+    </ul>
+</div>

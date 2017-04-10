@@ -1,0 +1,57 @@
+<div class="form-horizontal">
+
+
+    <div class="form-group">
+        <label for="market_url"
+               class="col-sm-5 control-label"></label>
+        <label for="market_url"
+               class="col-sm-5"><h6>{{ m_user.name }}</h6></label>
+    </div>
+    <div class="form-group">
+        <label for="market_url"
+               class="col-sm-5 control-label">部门:</label>
+        <label for="market_url"
+               class="col-sm-5">{{ m_user.department }}</label>
+    </div>
+    <div class="form-group">
+        <label for="market_url"
+               class="col-sm-5 control-label">工号:</label>
+        <label for="market_url"
+               class="col-sm-5">{{ m_user.employee_id }}</label>
+    </div>
+    <div class="form-group">
+        <label for="market_url"
+               class="col-sm-5 control-label">联系方式:</label>
+        <label for="market_url" class="col-sm-5">{{ m_user.mobile }}</label>
+    </div>
+    <div class="form-group">
+        <label for="market_url"
+               class="col-sm-5 control-label">IP:</label>
+        <label for="market_url" class="col-sm-5">{{ m_user.ip }}</label>
+    </div>
+</div>
+<div class="col-lg-12">
+    <h6>使用账号如下：</h6>
+    <table class="table table-striped table-bordered responsive">
+        <tr>
+            <th>市场名称</th>
+            <th>账号</th>
+            <th>密码</th>
+            <th>更新时间</th>
+            {#                    <th>操作</th>#}
+        </tr>
+        {% for m_account in m_accounts %}
+            <tr>
+                <td>{{ m_account.name }}</td>
+                <td>{{ m_account.account }}</td>
+                <td>{{ m_account.password }}</td>
+                <td>{{ m_account.updated_at }}</td>
+                {#                        <td><a href="#fakelink" mid="{{ m_account.a_id }}"#}
+                {#                               class="btn btn-sm btn-success"#}
+                {#                               data-toggle="modal"#}
+                {#                               data-target="#Add_Users_Modal" onclick="">删除</a>#}
+                {#                        </td>#}
+            </tr>
+        {% endfor %}
+    </table>
+</div>

@@ -1,0 +1,430 @@
+{% extends "base.html" %}
+{% set active_page = 'account_manage' %}
+
+{% block style %}
+    <style>
+    #modify_m_users label,#modify_m_users input {
+        cursor: pointer;
+    }
+
+    #markets td {
+        word-wrap:break-word;
+    }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div style="margin-left: auto;margin-right: auto;">
+        <h3 style="text-align: center;">三方市场账号管理</h3>
+    <form class="form-inline" style="margin-bottom: 9px;text-align: right;" action="{{ url_for('index.admin_index') }}" method="get">
+        <div class="form-group">
+            <label for="market_name"
+                   class="control-label">市场名：</label>
+                <input name="search_market_name" class="form-control" type="text" value="{{ market_name }}">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-primary">搜索</button>
+        </div>
+        <div class="form-group">
+            <button type="button" data-toggle="modal" data-target="#Import_Market_Modal"
+                    class="btn btn-sm btn-success"><span
+                    class="fui-plus"></span> 批量导入
+            </button>
+        </div>
+    </form>
+        <table style="table-layout:fixed;" class="table table-striped table-bordered table-responsive">
+            <tr>
+                <th style="width: 4%">编号</th>
+                <th>市场名称</th>
+                <th style="width: 20%">网址</th>
+                <th>账号</th>
+                <th>密码</th>
+                <th>使用人</th>
+                <th>更新时间</th>
+                <th>操作</th>
+            </tr>
+            {% for market in markets %}
+                <tr id="markets">
+                    <td>{{ loop.index }}</td>
+                    <td class="market_name">{{ market.name }}</td>
+                    <td>
+                        <a href="{% if not market.url.startswith("http") %}http://{% endif %}{{ market.url }}"
+                           target="_blank">{{ market.url }}</a></td>
+                    <td>{{ market.account }}</td>
+                    <td>{{ market.password }}</td>
+                    <td>
+
+
+                        {#                <div class="tagsinput-primary">#}
+                        {#            <input name="tagsinput" class="tagsinput" data-role="tagsinput" value="#}
+                        {% for user in market.users %}
+                            <span class="tag label label-info">{{ user.nickname }}</span>
+                        {% endfor %}
+                        {#            " />#}
+                        {#          </div>#}
+                    </td>
+                    <td>{{ market.updated_at }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary"
+                           style="margin-top: 2px;"
+                           mid="{{ market.mid }}" data-toggle="modal"
+                           data-target="#Add_Users_Modal"
+                           onclick="get_m_users_from_mid(this)"><span
+                                class="fui-user"></span>人员</a>
+                        <a class="btn btn-sm btn-warning"
+                           style="margin-top: 2px;"
+                           mid="{{ market.mid }}" data-toggle="modal"
+                           data-target="#Add_Market_Modal"
+                           onclick="get_market_data(this)"><span
+                                class="fui-new"></span>编辑</a>
+                        <a class="btn btn-sm btn-danger"
+                           style="margin-top: 2px;"
+                           mid="{{ market.mid }}"
+                           onclick="delete_market(this)"><span
+                                class="fui-cross"></span>删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div style="width: 25%; margin-left: auto;margin-right: auto;">
+            <button onclick="show_add_market()" type="button"
+                    data-toggle="modal" data-target="#Add_Market_Modal"
+                    class="btn btn-block btn-lg btn-success"><span
+                    class="fui-plus"></span> 新增市场
+            </button>
+        </div>
+
+        {% include "paginate.html" %}
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade bs-example-modal-sm" id="Add_Market_Modal"
+         tabindex="-1" role="dialog" aria-labelledby="myMarketLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myMarketLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="add_market">
+                        <div class="form-group">
+                            <label for="market_name"
+                                   class="col-sm-3 control-label">市场名称</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       name="market_name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="market_description"
+                                   class="col-sm-3 control-label">描述</label>
+                            <div class="col-sm-9">
+                                <textarea type="text" class="form-control"
+                                          name="market_description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="market_url"
+                                   class="col-sm-3 control-label">市场网址</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       name="market_url">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="market_account"
+                                   class="col-sm-3 control-label">账号</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       name="market_account">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="market_password"
+                                   class="col-sm-3 control-label">密码</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control"
+                                       name="market_password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="invalid_date"
+                                   class="col-sm-3 control-label">账号到期日</label>
+                            <div class="col-sm-9">
+                                <input type="text"
+                                       class="form-control datetimepicker"
+                                       name="invalid_date"
+                                       data-date-format="yyyy-mm-dd">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">取消
+                    </button>
+                    <button id="market_button" type="button"
+                            class="btn btn-primary">确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade bs-example-modal-sm" id="Import_Market_Modal"
+         tabindex="-1" role="dialog" aria-labelledby="myMarketLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 style="display: inline-block" class="modal-title">导入市场</h4><a target="_blank" href="{{ url_for('static', filename='template.xlsx') }}" style="margin-left: 8px;">模板下载</a>
+
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal" id="import_market" method="post" action="{{ url_for('index.excel_import') }}" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="market_name"
+                                   class="col-sm-3 control-label">选择excel：</label>
+                            <div class="col-sm-9">
+                                <input id="fileToUpload" class="form-control" type="file" runat="server" name="market_file">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label id="import_text" class="col-sm-12 control-label" style="text-align: center; color: red;"></label>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">取消
+                    </button>
+                    <button id="import_market_button" type="button"
+                            class="btn btn-primary">导入
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade bs-example-modal-sm" id="Add_Users_Modal"
+         tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width:710px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">编辑使用者</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal row"
+                          id="modify_m_users">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">取消
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            onclick="modify_m_users_from_mid()">确定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function show_add_market() {
+            $("#myMarketLabel").text("新增市场");
+            $("#market_button").unbind("click");
+            $("#market_button").bind("click", add_market);
+            $("input[name=market_name]").val("");
+            $("input[name=market_url]").val("");
+            $("textarea[name=market_description]").text("");
+            $("input[name=market_account]").val("");
+            $("input[name=market_password]").val("");
+            $("input[name=invalid_date]").val("");
+        }
+
+        function add_market() {
+            var market_name = $.trim($("input[name=market_name]").val());
+            if (market_name == "") {
+                display_message({"status": 400, "message": "市场名不能为空！"});
+                return false;
+            }
+            $.ajax({
+                type: "PUT",
+                url: $SCRIPT_ROOT + "/",
+                data: $('#add_market').serialize(),
+                async: false,
+                error: function (request) {
+                    alert("连接失败！");
+                },
+                success: function (res) {
+                    if (res.status == 200) {
+                        location.reload();
+                    } else {
+                        display_message(res);
+                    }
+                }
+            });
+        }
+
+        function get_market_data(obj) {
+            var mid = $(obj).attr("mid");
+            $("#myMarketLabel").text("编辑市场");
+            $("#Add_Market_Modal").attr("mid", mid);
+            $("#market_button").unbind("click");
+            $("#market_button").bind("click", modify_market);
+            $.ajax({
+                type: "GET",
+                url: $SCRIPT_ROOT + "/get_market_data/" + mid,
+                async: false,
+                error: function (request) {
+                    alert("连接出错！");
+                },
+                success: function (res) {
+                    if (res.status == 200) {
+                        var data = res.data;
+                        $("input[name=market_name]").val(data.name);
+                        $("input[name=market_url]").val(data.url);
+                        $("textarea[name=market_description]").text(data.description);
+                        $("input[name=market_account]").val(data.account);
+                        $("input[name=market_password]").val(data.password);
+                        $("input[name=invalid_date]").val(data.invalid_date);
+                    }
+                }
+            });
+        }
+
+
+        function modify_market() {
+            var mid = $("#Add_Market_Modal").attr("mid");
+            $.ajax({
+                type: "POST",
+                url: $SCRIPT_ROOT + "/" + mid,
+                data: $('#add_market').serialize(),
+                async: false,
+                error: function (request) {
+                    alert("连接失败！");
+                },
+                success: function (res) {
+                    if (res.status == 200) {
+                        location.reload();
+                    } else {
+                        display_message(res);
+                    }
+                }
+            });
+        }
+
+        function delete_market(obj) {
+            var mid = $(obj).attr("mid");
+            var market_name = $(obj).parents("tr").find(".market_name").text();
+            if (confirm("确定要删除市场 " + market_name + " 吗？")) {
+                $.ajax({
+                    type: "DELETE",
+                    url: $SCRIPT_ROOT + "/",
+                    data: {"mid": mid},
+                    async: false,
+                    error: function (request) {
+                        alert("连接失败！");
+                    },
+                    success: function (res) {
+                        if (res.status == 200) {
+                            location.reload();
+                        } else {
+                            display_message(res);
+                        }
+                    }
+                });
+            }
+        }
+
+        function get_m_users_from_mid(obj) {
+            var mid = $(obj).attr("mid");
+            $("#Add_Users_Modal").attr("mid", mid);
+            $.ajax({
+                type: "GET",
+                url: $SCRIPT_ROOT + "/get_m_users_from_mid/" + mid,
+                data: $('#add_market').serialize(),
+                async: false,
+                error: function (request) {
+                    alert("获取失败！");
+                },
+                success: function (data) {
+                    var all_users = data.all_users;
+                    if (all_users.length > 0) {
+                        $("#modify_m_users").html("");
+                        var select_users = data.select_users;
+
+                        for (var i in all_users) {
+                            var _html = '<div class="col-md-2"><label class="checkbox">\
+                <input type="checkbox" uid="' + all_users[i].uid + '" data-toggle="checkbox">'
+                                    + all_users[i].nickname + '</label></div>';
+                            $("#modify_m_users").append(_html);
+                        }
+                        $("#modify_m_users input[type=checkbox]").each(function () {
+                            if ($.inArray(parseInt($(this).attr("uid")), select_users) != -1) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    } else {
+                        $("#modify_m_users").html('<label style="margin-left:8px;">请先到使用人管理添加使用人！</label>');
+                    }
+                }
+            });
+        }
+
+        function modify_m_users_from_mid() {
+            var mid = $("#Add_Users_Modal").attr("mid");
+            var uids = [];
+            $("#modify_m_users input[type=checkbox]:checked").each(function () {
+                uids.push(parseInt($(this).attr("uid")));
+            });
+            $.ajax({
+                type: "POST",
+                url: $SCRIPT_ROOT + "/modify_m_users_from_mid/" + mid,
+                data: {"uids": uids},
+                async: false,
+                error: function (request) {
+                    alert("连接错误！");
+                },
+                success: function (res) {
+                    if (res.status == 200) {
+                        location.reload();
+                    } else {
+                        display_message(res)
+                    }
+                }
+            });
+        }
+
+        $('#import_market_button').click(function() {
+            $("#import_text").text('正在导入中……');
+            var ajax_option={
+                success:function(res){
+                    $("#import_text").text(res.message);
+                }
+            };
+            $('#import_market').ajaxSubmit(ajax_option);
+            return false;
+        });
+    </script>
+{% endblock %}

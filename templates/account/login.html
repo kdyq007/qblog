@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block navbar %}
+{% endblock %}
+
+{% block style %}
+    <style>
+        body {
+            margin-top: -30px;
+            color: #555;
+            font-size: 15px;
+            line-height: 1.7;
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+            background: #f7fafc;
+            -webkit-font-smoothing: subpixel-antialiased;
+        }
+
+        .index-main-body {
+            padding: 0;
+            min-height: 590px;
+            vertical-align: middle;
+            text-align: left;
+            white-space: normal;
+            margin-left: auto;
+            margin-right: auto;
+            width: 300px;
+        }
+
+    .index-tab-navs .navs-slider {
+    position: relative;
+    display: inline-block;
+}
+
+    .index-tab-navs a {
+    float: left;
+    width: 4em;
+    line-height: 35px;
+    opacity: .7;
+    -ms-filter: "alpha(Opacity=70)";
+    -webkit-transition: opacity .15s,color .15s;
+    transition: opacity .15s,color .15s;
+    color: inherit;
+}
+
+    .index-tab-navs a:hover {
+        color: #000000;
+    }
+
+    .index-tab-navs a.active {
+    opacity: 1;
+    -ms-filter: "alpha(Opacity=100)";
+    color: #16a085;
+}
+
+
+    .index-tab-navs .navs-slider .navs-slider-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 0 .8em;
+    width: 2.4em;
+    height: 2px;
+    background: #16a085;
+    -webkit-transition: left .15s ease-in;
+    transition: left .15s ease-in;
+}
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="index-main" style="text-align: center;">
+        <br>
+        <h3>第三方市场账号管理系统</h3>
+        <div class="index-main-body">
+            <div class="index-tab-navs" style="margin-bottom: 10px;font-size: 18px;text-align: center;">
+            <div class="navs-slider" data-active-index="1">
+            <a id="login_tab"
+                        href="#login"
+                        class="active" onclick="set_slider()">登录</a>
+            <a id="regist_tab"
+                        href="#regist"
+               onclick="set_slider('#regist')">注册</a>
+            <span class="navs-slider-bar"></span>
+            </div>
+            </div>
+            <div class="tab-content" style="margin-top: 20px;">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>{{ message }}
+</div>
+                        {% endfor %}
+
+                {% endwith %}
+
+
+
+                <div class="tab-pane fade in active" id="login">
+                    <form role="form" action="{{ url_for('account.login') }}"
+                          method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.login(size=16, class="form-control", placeholder="用户名/邮箱/手机号码", required=True) }}
+                            {% for error in form.errors.login %}
+                                <p class="help-block" style="color: red;">* {{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.password(size=16, class="form-control", placeholder="密码", required=True) }}
+                            {% for error in form.errors.password %}
+                                <p class="help-block" style="color: red;">* {{ error }}</p>
+                            {% endfor %}
+                        </div>
+{#                        <div class="form-group">#}
+{#                            <div class="form-inline">#}
+{#                                <img id="login_verification" src="{{ url_for('index.get_code') }}" onclick="javascript:this.src= $SCRIPT_ROOT + '/VerifyCode?tm='+Math.random()"/>#}
+{#                                {{ form.verification(size=16, class="form-control pull-right", placeholder="验证码", required=True) }}#}
+{#                                {% for error in form.errors.verification %}#}
+{#                                    <p class="help-block" style="color: red;">* {{ error }}</p>#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+                        <label>
+                            {{ form.remember }}&nbsp;&nbsp;记住我
+                        </label>
+                        <button type="submit"
+                                class="btn btn-block btn-lg btn-primary g-recaptcha"
+                                data-sitekey="6LcZRhwUAAAAACyTq6XjDTY142zjUv1_M9efUssz"
+                                style="margin-top: 10px;">登陆
+                        </button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="regist">
+
+                    <form action="{{ url_for('account.regist') }}"
+                          method="POST">
+                        {{ form_regist.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form_regist.login(size=16, class="form-control", placeholder="用户名", required=True) }}
+                            {% for error in form_regist.errors.login %}
+                                <p class="help-block" style="color: red;">* {{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group required">
+                            {{ form_regist.password(size=16, class="form-control", placeholder="密码", required=True) }}
+                            {% for error in form_regist.errors.password %}
+                                <p class="help-block" style="color: red;">* {{ error }}</p>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group required">
+                            {{ form_regist.password1(size=16, class="form-control", placeholder="确认密码", required=True) }}
+                            {% for error in form_regist.errors.password1 %}
+                                <p class="help-block" style="color: red;">* {{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            {{ form_regist.email(size=11, class="form-control", placeholder="邮箱", required=True) }}
+                            {% for error in form_regist.errors.email %}
+                                <p class="help-block" style="color: red;">* {{ error }}</p>
+                            {% endfor %}
+                        </div>
+{#                        <div class="form-group">#}
+{#                            {{ form_regist.mobile(size=11, class="form-control", placeholder="手机号", required=True) }}#}
+{#                            {% for error in form_regist.errors.mobile %}#}
+{#                                <p class="help-block" style="color: red;">* {{ error }}</p>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <div class="form-inline">#}
+{#                                <img id="regist_verification" src="{{ url_for('index.get_code') }}" onclick="javascript:this.src= $SCRIPT_ROOT + '/VerifyCode?tm='+Math.random()"/>#}
+{#                                {{ form.verification(size=16, class="form-control pull-right", placeholder="验证码", required=True) }}#}
+{#                                {% for error in form.errors.verification %}#}
+{#                                    <p class="help-block" style="color: red;">* {{ error }}</p>#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                        </div>#}
+                        <button type="submit"
+                                class="btn btn-block btn-lg btn-primary"
+                                style="margin-top: 10px;">注册
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static',filename='particles/particles.js') }}"></script>
+    <script>
+    $(function() {
+        particlesJS.load('particles-js', "{{ url_for('static', filename='particles/particles.json') }}", function() {
+        });
+
+        {% if action %}
+            window.location.hash = "regist";
+        {% endif %}
+        var action = window.location.hash;
+        if (action) {
+            auto_slider(action);
+        }
+    });
+
+    function set_slider(action) {
+        $(".alert").fadeOut();
+        auto_slider(action);
+    }
+
+    function auto_slider(action) {
+
+        if (action == "#regist"){
+            $('#regist_verification').click();
+            $('#regist_tab').tab('show');
+            $("#regist_tab").addClass("active")
+            $("#login_tab").removeClass("active");
+            $(".index-tab-navs .navs-slider[data-active-index='1'] .navs-slider-bar").css("left", "4em");
+        } else {
+            $('#login_verification').click();
+            $('#login_tab').tab('show');
+            $("#login_tab").addClass("active")
+            $("#regist_tab").removeClass("active");
+            $(".index-tab-navs .navs-slider[data-active-index='1'] .navs-slider-bar").css("left", "0");
+        }
+    }
+    </script>
+{% endblock %}
