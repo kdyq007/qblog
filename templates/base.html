@@ -73,9 +73,11 @@
   <section class="content-wrap">
 <div class="container">
     <div class="row">
+    <div class="col-md-8 text-center">
   {% block body %}
     <h1>你好，世界！</h1>
   {% endblock %}
+    </div>
 
 
    {% block sidebar %}
@@ -133,16 +135,13 @@
 <!-- end tag cloud widget -->
 
 <!-- start music widget -->
-<div class="widget">
-	<h4 class="title">奇哥爱音乐</h4>
-	<div class="content tag-cloud">
-		<iframe frameborder="no" border="0" width=300 height=450 src="//music.163.com/outchain/player?type=0&id=44882284&auto=1&height=430"></iframe>
-	</div>
-</div>
-<!-- end music widget -->
-
-<!-- start widget -->
-<!-- end widget -->                </aside>
+{#<div class="widget">#}
+{#	<h4 class="title">奇哥爱音乐</h4>#}
+{#	<div class="content tag-cloud">#}
+{#		<iframe frameborder="no" border="0" width=300 height=450 src="//music.163.com/outchain/player?type=0&id=44882284&auto=1&height=430"></iframe>#}
+{#	</div>#}
+{#</div>#}
+</aside>
   {% endblock %}
 
         </div>

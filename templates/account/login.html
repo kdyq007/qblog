@@ -1,73 +1,74 @@
 {% extends "base.html" %}
-{% block navbar %}
+{% block title %}
+主页
 {% endblock %}
 
-{% block style %}
-    <style>
-        body {
-            margin-top: -30px;
-            color: #555;
-            font-size: 15px;
-            line-height: 1.7;
-            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
-            background: #f7fafc;
-            -webkit-font-smoothing: subpixel-antialiased;
-        }
-
-        .index-main-body {
-            padding: 0;
-            min-height: 590px;
-            vertical-align: middle;
-            text-align: left;
-            white-space: normal;
-            margin-left: auto;
-            margin-right: auto;
-            width: 300px;
-        }
-
-    .index-tab-navs .navs-slider {
-    position: relative;
-    display: inline-block;
-}
-
-    .index-tab-navs a {
-    float: left;
-    width: 4em;
-    line-height: 35px;
-    opacity: .7;
-    -ms-filter: "alpha(Opacity=70)";
-    -webkit-transition: opacity .15s,color .15s;
-    transition: opacity .15s,color .15s;
-    color: inherit;
-}
-
-    .index-tab-navs a:hover {
-        color: #000000;
-    }
-
-    .index-tab-navs a.active {
-    opacity: 1;
-    -ms-filter: "alpha(Opacity=100)";
-    color: #16a085;
-}
-
-
-    .index-tab-navs .navs-slider .navs-slider-bar {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    margin: 0 .8em;
-    width: 2.4em;
-    height: 2px;
-    background: #16a085;
-    -webkit-transition: left .15s ease-in;
-    transition: left .15s ease-in;
-}
-    </style>
-{% endblock %}
+{#{% block style %}#}
+{#    <style>#}
+{#        body {#}
+{#            margin-top: -30px;#}
+{#            color: #555;#}
+{#            font-size: 15px;#}
+{#            line-height: 1.7;#}
+{#            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;#}
+{#            background: #f7fafc;#}
+{#            -webkit-font-smoothing: subpixel-antialiased;#}
+{#        }#}
+{##}
+{#        .index-main-body {#}
+{#            padding: 0;#}
+{#            min-height: 590px;#}
+{#            vertical-align: middle;#}
+{#            text-align: left;#}
+{#            white-space: normal;#}
+{#            margin-left: auto;#}
+{#            margin-right: auto;#}
+{#            width: 300px;#}
+{#        }#}
+{##}
+{#    .index-tab-navs .navs-slider {#}
+{#    position: relative;#}
+{#    display: inline-block;#}
+{#}#}
+{##}
+{#    .index-tab-navs a {#}
+{#    float: left;#}
+{#    width: 4em;#}
+{#    line-height: 35px;#}
+{#    opacity: .7;#}
+{#    -ms-filter: "alpha(Opacity=70)";#}
+{#    -webkit-transition: opacity .15s,color .15s;#}
+{#    transition: opacity .15s,color .15s;#}
+{#    color: inherit;#}
+{#}#}
+{##}
+{#    .index-tab-navs a:hover {#}
+{#        color: #000000;#}
+{#    }#}
+{##}
+{#    .index-tab-navs a.active {#}
+{#    opacity: 1;#}
+{#    -ms-filter: "alpha(Opacity=100)";#}
+{#    color: #16a085;#}
+{#}#}
+{##}
+{##}
+{#    .index-tab-navs .navs-slider .navs-slider-bar {#}
+{#    position: absolute;#}
+{#    left: 0;#}
+{#    bottom: 0;#}
+{#    margin: 0 .8em;#}
+{#    width: 2.4em;#}
+{#    height: 2px;#}
+{#    background: #16a085;#}
+{#    -webkit-transition: left .15s ease-in;#}
+{#    transition: left .15s ease-in;#}
+{#}#}
+{#    </style>#}
+{#{% endblock %}#}
 
 {% block body %}
-    <div class="index-main" style="text-align: center;">
+    <div class="index-main col-md-6" style="text-align: center;">
         <br>
         <h3>第三方市场账号管理系统</h3>
         <div class="index-main-body">
