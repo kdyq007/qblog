@@ -45,7 +45,7 @@ def home():
 #     else:
 #         return redirect(url_for('index.employee_index'))
     from forms.account import LoginForm
-    form = LoginForm(login=request.args.get('login', None),
+    form = LoginForm(username=request.args.get('username', None),
                          next=request.args.get('next', None),
                          password=request.args.get("password", None),
                          verification=request.args.get('verification', None))
