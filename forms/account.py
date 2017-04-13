@@ -10,7 +10,7 @@ from wtforms import validators
 
 
 class LoginForm(Form):
-    login = StringField(u"用户名/邮箱/手机号码", [
+    username = StringField(u"用户名/邮箱/手机号码", [
         validators.required(message=u"请输入用户名/邮箱/手机号码")
     ])
     password = PasswordField(u"密码", [validators.required(message=u'请输入密码'),
