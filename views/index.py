@@ -37,14 +37,19 @@ index = Blueprint("index", __name__)
 
 
 @index.route('/', methods=['GET'])
-@auth.require()
-@ip_required
+# @auth.require()
+# @ip_required
 def home():
-    if g.user.is_account_admin():
-        return redirect(url_for('index.admin_index'))
-    else:
-        return redirect(url_for('index.employee_index'))
-
+#     if g.user.is_account_admin():
+#         return redirect(url_for('index.admin_index'))
+#     else:
+#         return redirect(url_for('index.employee_index'))
+    from forms.account import LoginForm
+    form = LoginForm(login=request.args.get('login', None),
+                         next=request.args.get('next', None),
+                         password=request.args.get("password", None),
+                         verification=request.args.get('verification', None))
+    return render_template('index.html', form=form)
 
 @index.route('/admin_index', methods=['GET'])
 @auth.require()

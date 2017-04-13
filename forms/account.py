@@ -43,8 +43,8 @@ class RegistForm(Form):
     #     validators.required(message=u"请输入手机号码"),
     #     validators.regexp('^1[34578]\d{9}$', message=u"请输入11位数的手机号码")
     # ])
-    verification = StringField(u"验证码",
-                               [validators.required(message=u'请输入验证码')])
+    # verification = StringField(u"验证码",
+    #                            [validators.required(message=u'请输入验证码')])
     next = HiddenField()
     submit = SubmitField(u"注册")
 

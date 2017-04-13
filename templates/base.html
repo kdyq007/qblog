@@ -84,8 +84,55 @@
 
    {% block sidebar %}
        <aside class="col-md-4 sidebar">
-                <!-- start widget -->
-<!-- end widget -->
+
+       <!-- start user widget -->
+<div class="widget">
+{% if g.user %}
+	<h4 class="title">用户</h4>
+	<div class="content community">
+	</div>
+{% else %}
+    <h4 class="title">登录</h4>
+	<div class="content community">
+		<form role="form" action="{{ url_for('account.login') }}"
+                          method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.login(size=16, class="form-control", placeholder="用户名/邮箱/手机号码", required=True) }}
+                            {% for error in form.errors.login %}
+                                <p class="help-block" style="color: red;">* {{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.password(size=16, class="form-control", placeholder="密码", required=True) }}
+                            {% for error in form.errors.password %}
+                                <p class="help-block" style="color: red;">* {{ error }}</p>
+                            {% endfor %}
+                        </div>
+                         <div class="form-group">
+{#                            <div class="form-inline">#}
+{#                                <img id="login_verification" src="{{ url_for('index.get_code') }}" onclick="javascript:this.src= $SCRIPT_ROOT + '/VerifyCode?tm='+Math.random()"/>#}
+{#                                {{ form.verification(size=16, class="form-control pull-right", placeholder="验证码", required=True) }}#}
+{#                                {% for error in form.errors.verification %}#}
+{#                                    <p class="help-block" style="color: red;">* {{ error }}</p>#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+                            <div id="embed-captcha"></div>
+                            <p id="wait" class="show">正在加载验证码......</p>
+                            <p id="notice" class="hide">请先拖动验证码到相应位置</p>
+                        </div>
+                        <label>
+                            {{ form.remember }}&nbsp;&nbsp;记住我
+                        </label>
+                        <button id="login" type="submit"
+                                class="btn btn-block btn-lg btn-primary"
+                                style="margin-top: 10px;">登陆
+                        </button>
+                    </form>
+	</div>
+{% endif %}
+</div>
+<!-- end user widget -->
 
 <!-- start tag cloud widget -->
 <div class="widget">
@@ -157,6 +204,8 @@
     <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="http://static.geetest.com/static/tools/gt.js"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
   {% block script %}
   {% endblock %}
   </body>
