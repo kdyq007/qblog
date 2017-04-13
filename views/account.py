@@ -36,6 +36,7 @@ from forms.account import RegistForm
 from forms.account import ChangePasswordForm
 from lib.account import Account_Manager
 from lib.auth import Auth_Manager
+from my_lib.geetest import GeetestManage
 
 account = Blueprint('account', __name__)
 
@@ -112,11 +113,11 @@ def login():
 
     current_app.logger.info(form.validate_on_submit())
     if form.validate_on_submit():
-        if not account_manager.verification_code(form.verification.data):
-            flash(u"验证码错误！", "danger")
-            account_manager.regist_failed()
-            return render_template("account/login.html", form=form,
-                                   form_regist=form_regist)
+        # if not account_manager.verification_code(form.verification.data):
+        #     flash(u"验证码错误！", "danger")
+        #     account_manager.regist_failed()
+        #     return render_template("account/login.html", form=form,
+        #                            form_regist=form_regist)
         if not account_manager.can_login(form.login.data):
             flash(u"密码错误次数太多，请于24小时后再尝试登陆 或 联系管理员！", "danger")
             return render_template("account/login.html", form=form,
@@ -557,4 +558,41 @@ def change_password():
         else:
             flash(u"修改失败，请重试！", "danger")
             return render_template("account/update_password.html", form=form)
+
+
+@account.route('/VerifyCode/', methods=['GET'])
+def get_code():
+    gm = GeetestManage()
+    return gm.get_captcha()
+    # import uuid
+    # ic = ImageChar(fontColor=(100, 211, 90))
+    # strs, code_img = ic.randChinese(4)
+    # if "uuid" in session:
+    #     _uuid = session.get("uuid")
+    # else:
+    #     _uuid = uuid.uuid1()
+    #     session["uuid"] = _uuid
+    # redis_client = redis.StrictRedis(
+    #     host=current_app.config.get("CACHE_REDIS_HOST"),
+    #     port=current_app.config.get("CACHE_REDIS_PORT"),
+    #     db=current_app.config.get("REDIS_DB"), password="")
+    # redis_client.hset("verification", _uuid, strs)
+    # redis_client.expire("verification", datetime.timedelta(minutes=5))
+    # current_app.logger.info(
+    #     "session verification 1: " + strs)
+    # buf = StringIO.StringIO()
+    # code_img.save(buf, 'JPEG', quality=70)
+    # buf_str = buf.getvalue()
+    # response = current_app.make_response(buf_str)
+    # response.headers['Content-Type'] = 'image/jpeg'
+    # return response
+
+
+@account.route('/ajax_validate', methods=["POST"])
+def pc_validate_captcha():
+    gm = GeetestManage()
+    is_suc = gm.validata_captcha()
+    result = {"status": "success"} if is_suc else {"status": "fail"}
+    return json.dumps(result)
+
 
