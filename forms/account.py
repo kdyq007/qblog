@@ -16,7 +16,7 @@ class LoginForm(Form):
     password = PasswordField(u"密码", [validators.required(message=u'请输入密码'),
                                      validators.length(6, 12,
                                                        message=u'密码长度在6到12位')])
-    verification = StringField(u"验证码", [validators.required(message=u'请输入验证码')])
+    # verification = StringField(u"验证码", [validators.required(message=u'请输入验证码')])
     remember = BooleanField(u"记住我")
     next = HiddenField()
     submit = SubmitField(u"登陆")
@@ -61,7 +61,7 @@ class ChangePasswordForm(Form):
                                                           message=u'密码长度在6到12位'),
                                         validators.EqualTo('password',
                                                            message=u'密码必须一致')])
-    verification = StringField(u"验证码",
-                               [validators.required(message=u'请输入验证码')])
+    # verification = StringField(u"验证码",
+    #                            [validators.required(message=u'请输入验证码')])
     next = HiddenField()
     submit = SubmitField(u"注册")

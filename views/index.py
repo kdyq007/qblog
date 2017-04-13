@@ -31,7 +31,7 @@ from models.user import UserCache
 # from models.market import Market
 # from models.users import Market_Users
 from permissions import auth
-from my_lib.geetest import GeetestManage
+
 
 index = Blueprint("index", __name__)
 
@@ -416,42 +416,6 @@ def get_market_data(mid):
         }
         return jsonify({"status": 200, "data": data})
     return jsonify({"status": 400, "message": "获取数据失败！"})
-
-
-@index.route('/VerifyCode/', methods=['GET'])
-def get_code():
-    # import uuid
-    # ic = ImageChar(fontColor=(100, 211, 90))
-    # strs, code_img = ic.randChinese(4)
-    # if "uuid" in session:
-    #     _uuid = session.get("uuid")
-    # else:
-    #     _uuid = uuid.uuid1()
-    #     session["uuid"] = _uuid
-    # redis_client = redis.StrictRedis(
-    #     host=current_app.config.get("CACHE_REDIS_HOST"),
-    #     port=current_app.config.get("CACHE_REDIS_PORT"),
-    #     db=current_app.config.get("REDIS_DB"), password="")
-    # redis_client.hset("verification", _uuid, strs)
-    # redis_client.expire("verification", datetime.timedelta(minutes=5))
-    # current_app.logger.info(
-    #     "session verification 1: " + strs)
-    # buf = StringIO.StringIO()
-    # code_img.save(buf, 'JPEG', quality=70)
-    # buf_str = buf.getvalue()
-    # response = current_app.make_response(buf_str)
-    # response.headers['Content-Type'] = 'image/jpeg'
-    # return response
-    gm = GeetestManage()
-    return gm.get_captcha()
-
-
-@index.route('/pc-geetest/ajax_validate', methods=["POST"])
-def pc_validate_captcha():
-    gm = GeetestManage()
-    is_suc = gm.validata_captcha()
-    result = {"status": "success"} if is_suc else {"status": "fail"}
-    return json.dumps(result)
 
 
 @index.route('/release_user', methods=['GET'])

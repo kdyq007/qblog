@@ -208,11 +208,10 @@
     $(function() {
         $.ajax({
             // 获取id，challenge，success（是否启用failback）
-            url: "/VerifyCode?t=" + (new Date()).getTime(), // 加随机数防止缓存
+            url: "/account/VerifyCode?t=" + (new Date()).getTime(), // 加随机数防止缓存
             type: "get",
             dataType: "json",
             success: function (data) {
-                console.log(data);
                 // 使用initGeetest接口
                 // 参数1：配置参数
                 // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
