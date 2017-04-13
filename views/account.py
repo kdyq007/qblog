@@ -81,7 +81,7 @@ def auth_with_key(func):
 
 
 @account.route("/login", methods=("GET", "POST"))
-@templated("account/login.html")
+# @templated("account/login.html")
 def login():
 
     # send_reg_mail.delay("kdyq@vip.qq.com")
@@ -113,11 +113,13 @@ def login():
 
     current_app.logger.info(form.validate_on_submit())
     if form.validate_on_submit():
+        gm = GeetestManage()
+        if not gm.validata_captcha():
         # if not account_manager.verification_code(form.verification.data):
-        #     flash(u"验证码错误！", "danger")
-        #     account_manager.regist_failed()
-        #     return render_template("account/login.html", form=form,
-        #                            form_regist=form_regist)
+            flash(u"验证码错误！", "danger")
+            account_manager.regist_failed()
+            return render_template("account/login.html", form=form,
+                                   form_regist=form_regist)
         if not account_manager.can_login(form.login.data):
             flash(u"密码错误次数太多，请于24小时后再尝试登陆 或 联系管理员！", "danger")
             return render_template("account/login.html", form=form,
@@ -181,7 +183,9 @@ def regist():
         return render_template("account/login.html", form=form,
                                form_regist=form_regist, action="regist")
     if form_regist.validate_on_submit():
-        if not account_manager.verification_code(form.verification.data):
+        gm = GeetestManage()
+        if not gm.validata_captcha():
+        # if not account_manager.verification_code(form.verification.data):
             flash(u"验证码错误！", "danger")
             account_manager.regist_failed()
             return render_template("account/login.html", form=form,
@@ -525,7 +529,9 @@ def change_password():
             flash(u"由于您的操作错误太过频繁，请于30分钟之后再做尝试！", "danger")
             return render_template(url_for('index.home'))
         if form.validate_on_submit():
-            if not account_manager.verification_code(form.verification.data):
+            gm = GeetestManage()
+            if not gm.validata_captcha():
+            # if not account_manager.verification_code(form.verification.data):
                 flash(u"验证码错误！", "danger")
                 account_manager.regist_failed()
                 return render_template("account/update_password.html", form=form)
