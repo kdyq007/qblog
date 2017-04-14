@@ -7,7 +7,7 @@ html,body{
 
 .btn{
     padding: 7px 14px;
-    border-radius: 2px;
+    border-radius: 50px;
 }
 
 .btn-default{
@@ -74,8 +74,38 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 100%;
 }
 
+/*.navbar{*/
+    /*!*text-align: center;*!*/
+    /*background: #ffffff;*/
+    /*border-top: 1px solid #ebebeb;*/
+    /*border-bottom: 2px solid #e1e1e1;*/
+    /*margin-bottom: 35px;*/
+/*}*/
+
+/*.navbar .nav li.active{*/
+    /*border-bottom: 2px solid #e67e22;*/
+    /*margin-bottom: -2px;*/
+/*}*/
+
+/*.navbar .nav li > a{*/
+    /*color: #505050;*/
+/*}*/
+
+/*.navbar .nav li:hover > a {*/
+    /*color: #e67e22;*/
+    /*text-decoration: none;*/
+    /*background: none;*/
+/*}*/
+
+/*.navbar .nav li:visited, .navbar .nav li:active > a {*/
+    /*background: none;*/
+/*}*/
+
+
+
+
 .main-navigation{
-    text-align: center;
+    /*text-align: center;*/
     background: #ffffff;
     border-top: 1px solid #ebebeb;
     border-bottom: 2px solid #e1e1e1;
@@ -98,17 +128,27 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
 }
 
-.main-navigation .menu li a{
+.main-navigation .menu li > a{
     color: #505050;
     line-height: 4em;
     display: block;
     padding: 0 21px;
 }
 
+.main-navigation .menu .other li > a{
+    padding: 0px;
+}
+
 .main-navigation .menu li:hover > a {
     color: #e67e22;
     text-decoration: none;
 }
+
+
+.main-navigation .menu .btn-default {
+    padding: 6px 14px;
+}
+
 
 .widget {
     margin-bottom: 35px;
